@@ -47,9 +47,7 @@ PingPong/
 *.~dfm
 *.~h
 *.~bpr
-*.cpp
 *.dfm
-*.h
 *.obj
 *.bpr
 *.res
