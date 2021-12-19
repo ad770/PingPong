@@ -22,6 +22,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
                  try
                  {
                          throw Exception("");
+
                  }
                  catch (Exception &exception)
                  {
