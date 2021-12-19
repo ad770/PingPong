@@ -24,6 +24,13 @@ __published:	// IDE-managed Components
         TTimer *p2_up;
         TTimer *p2_down;
         TLabel *Label1;
+        TLabel *winner;
+        TLabel *score;
+        TButton *Button1;
+        TButton *Button2;
+        TButton *Button3;
+        TTimer *startCounter;
+        TLabel *startLabel;
         void __fastcall mainTimer(TObject *Sender);
         void __fastcall p1_upTimer(TObject *Sender);
         void __fastcall p1_downTimer(TObject *Sender);
@@ -33,6 +40,10 @@ __published:	// IDE-managed Components
           TShiftState Shift);
         void __fastcall p2_upTimer(TObject *Sender);
         void __fastcall p2_downTimer(TObject *Sender);
+        void __fastcall Button1Click(TObject *Sender);
+        void __fastcall Button2Click(TObject *Sender);
+        void __fastcall Button3Click(TObject *Sender);
+        void __fastcall startCounterTimer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);

@@ -12,6 +12,8 @@ TForm1 *Form1;
 int x=-5;
 int y=-3;
 int hits=0;
+int scorePlayer1=0;
+int scorePlayer2=0;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -21,16 +23,18 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 	AnsiString strSteeringRules = "How to play?";
         AnsiString strSteeringRulesPlayer1 = "Player 1 is using 'A' and 'Z'";
         AnsiString strSteeringRulesPlayer2 = "Player 2 is using UP_ARROW and DOWN_ARROW";
-	AnsiString strGameRules1 = "To increase the ball's speed hit the ball with the paddle's corner";
-        AnsiString strGameRules2 = "To decrease the ball's speed hit the ball with the paddle's center";
+	AnsiString strGameRules1 = "To increase the angle hit the ball with edge of the paddle";
+        AnsiString strGameRules2 = "To decrease the angle hit the ball with the center part the paddle";
+        AnsiString strGameRules3 = "Every 5 hit speed will increase";
 	AnsiString strFinal = "Enjoy!";
 
 	ShowMessage(strHelloMessage + sLineBreak + sLineBreak + strSteeringRules + sLineBreak +
 			strSteeringRulesPlayer1 + sLineBreak + strSteeringRulesPlayer2 + sLineBreak + sLineBreak +
-                        strGameRules1 + sLineBreak + strGameRules2 + sLineBreak + sLineBreak +
+                        strGameRules1 + sLineBreak + strGameRules2 +sLineBreak + strGameRules3 + sLineBreak + sLineBreak +
                         strFinal);
 
         //dodac timer
+        startCounter->Enabled=true;
         main->Enabled=true;
 }
 //---------------------------------------------------------------------------
@@ -57,12 +61,20 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
                 p1_down->Enabled=false;
                 p2_up->Enabled=false;
                 p2_down->Enabled=false;
-                if (Application->MessageBoxA("Chcesz rozpoczac nowa gre?","Koniec gry", MB_YESNO | MB_ICONQUESTION) == IDYES) {
-                        ball->Top = 234; ball->Left = 484;
-                        ball->Visible=true;
-                        main->Enabled=true;
-                        y=-3;
-                };
+                if (ball->Left < 100) {
+                        winner->Caption="Player 2 won!";
+                        scorePlayer1++;
+                }
+                else {
+                        winner->Caption="Player 1 won!";
+                        scorePlayer2++;
+                }
+                winner->Visible=true;
+                score->Caption=IntToStr(scorePlayer1)+":"+IntToStr(scorePlayer2);
+                score->Visible=true;
+                Button1->Visible=true;
+                Button2->Visible=true;
+                Button3->Visible=true;
         }
         //odbicie player1
         else if ((ball->Top < player1->Top + player1->Height &&
@@ -149,4 +161,40 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
 
 
 
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+        winner->Visible=false;
+        score->Visible=false;
+        Button1->Visible=false;
+        Button2->Visible=false;
+        Button3->Visible=false;
+        ball->Top = 234; ball->Left = 484;
+        ball->Visible=true;
+        main->Enabled=true;
+        y=-3;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+        scorePlayer1=0;
+        scorePlayer2=0;
+        Button1Click(Owner);        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+        Application->Terminate();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::startCounterTimer(TObject *Sender)
+{
+
+      startLabel->Visible=true;
+
+}
+//---------------------------------------------------------------------------
 
