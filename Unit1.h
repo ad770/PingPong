@@ -29,8 +29,8 @@ __published:	// IDE-managed Components
         TButton *Button1;
         TButton *Button2;
         TButton *Button3;
-        TTimer *startCounter;
         TLabel *startLabel;
+        TTimer *startCounter;
         void __fastcall mainTimer(TObject *Sender);
         void __fastcall p1_upTimer(TObject *Sender);
         void __fastcall p1_downTimer(TObject *Sender);

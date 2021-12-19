@@ -14,6 +14,7 @@ int y=-3;
 int hits=0;
 int scorePlayer1=0;
 int scorePlayer2=0;
+int seconds=4;
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
@@ -33,9 +34,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
                         strGameRules1 + sLineBreak + strGameRules2 +sLineBreak + strGameRules3 + sLineBreak + sLineBreak +
                         strFinal);
 
-        //dodac timer
         startCounter->Enabled=true;
-        main->Enabled=true;
 }
 //---------------------------------------------------------------------------
 
@@ -190,11 +189,18 @@ void __fastcall TForm1::Button3Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
 void __fastcall TForm1::startCounterTimer(TObject *Sender)
 {
+    seconds--;
 
-      startLabel->Visible=true;
+    startLabel->Caption=IntToStr(seconds);
 
+    if(seconds<1) {
+        startLabel->Visible=false;
+        startCounter->Enabled=false;
+        main->Enabled=true;
+    }
 }
 //---------------------------------------------------------------------------
 
