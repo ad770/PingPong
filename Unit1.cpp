@@ -10,7 +10,7 @@
 TForm1 *Form1;
 
 int x=-5;
-int y=-5;
+int y=-3;
 int hits=0;
 
 //---------------------------------------------------------------------------
@@ -37,6 +37,10 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 void __fastcall TForm1::mainTimer(TObject *Sender)
 {
+        AnsiString angle;
+        angle=IntToStr(abs(y));
+        Label1->Caption="Angle = "+angle;
+
         ball->Left +=x;
         ball->Top +=y;
 
@@ -46,7 +50,7 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
         if ((ball->Top + ball->Height+5) >= (playground->Top + playground->Height)) y=-y;
 
         //koniec gry
-        if (ball->Left < player1->Left + player1->Width - 25 || ball->Left + ball->Width > player2->Left + 15){
+        if (ball->Left < player1->Left + player1->Width/2 || ball->Left + ball->Width > player2->Left + player2->Width){
                 main->Enabled=false;
                 ball->Visible=false;
                 p1_up->Enabled=false;
@@ -54,35 +58,49 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
                 p2_up->Enabled=false;
                 p2_down->Enabled=false;
                 if (Application->MessageBoxA("Chcesz rozpoczac nowa gre?","Koniec gry", MB_YESNO | MB_ICONQUESTION) == IDYES) {
-                        ball->Top = 280; ball->Left = 496;
+                        ball->Top = 234; ball->Left = 484;
                         ball->Visible=true;
                         main->Enabled=true;
-;
+                        y=-3;
                 };
         }
         //odbicie player1
-        else if (ball->Top < player1->Top + player1->Height &&
-                ball->Top > player1->Top + player1->Height - 30 &&
+        else if ((ball->Top < player1->Top + player1->Height &&
+                ball->Top > player1->Top + player1->Height - 40 ||
                 ball->Top + ball->Height > player1->Top &&
-                ball->Top + ball->Height < player1->Top + 30 &&
-                ball->Left < player1->Left + player1->Width) {
+                ball->Top + ball->Height < player1->Top + 40) &&
+                ball->Left <= player1->Left + player1->Width) {
                         x=-x;
-                        main->Interval /= 4;
+                        if (y>0) y++;
+                        else y--;
                         hits++;
                 }
-        else if (ball->Top <= player1->Top + player1->Height - 30 &&
-                ball->Top + ball->Height >= player1->Top + 30 &&
-                ball->Left < player1->Left + player1->Width) {
-                        if (main->Interval == 15) x=-x;
-                        else main->Interval *= 4;
+        else if (ball->Top <= player1->Top + player1->Height - 40 &&
+                ball->Top + ball->Height >= player1->Top + 40 &&
+                ball->Left <= player1->Left + player1->Width) {
+                        x=-x;
+                        if (y>0) y--;
+                        else if (y<0) y++;
                         hits++;
                 }
 
         //odbicie player2
-        else if (ball->Top < player2->Top + player2->Height &&
+        else if ((ball->Top < player2->Top + player2->Height &&
+                ball->Top > player2->Top + player2->Height - 40 ||
                 ball->Top + ball->Height > player2->Top &&
-                ball->Left + ball->Width > player2->Left) {
+                ball->Top + ball->Height < player2->Top + 40) &&
+                ball->Left + ball->Width >= player2->Left) {
                         x=-x;
+                        if (y>=0) y++;
+                        else y--;
+                        hits++;
+                }
+        else if (ball->Top <= player2->Top + player2->Height - 40 &&
+                ball->Top + ball->Height >= player2->Top + 40 &&
+                ball->Left + ball->Width >= player2->Left) {
+                        x=-x;
+                        if (y>0) y--;
+                        else if (y<0) y++;
                         hits++;
                 }
 }
@@ -126,6 +144,8 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
         if (Key == VK_DOWN) p2_down->Enabled=false;
 }
 //---------------------------------------------------------------------------
+
+
 
 
 

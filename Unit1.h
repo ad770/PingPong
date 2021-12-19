@@ -9,6 +9,7 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 #include <Graphics.hpp>
+#include <Mask.hpp>
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -22,6 +23,7 @@ __published:	// IDE-managed Components
         TTimer *p1_down;
         TTimer *p2_up;
         TTimer *p2_down;
+        TLabel *Label1;
         void __fastcall mainTimer(TObject *Sender);
         void __fastcall p1_upTimer(TObject *Sender);
         void __fastcall p1_downTimer(TObject *Sender);
