@@ -46,10 +46,9 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
 {
         AnsiString angle;
         AnsiString speed;
-        angle=FloatToStrF(abs(y),ffNumber, 7, 2);
-        speed=FloatToStrF(abs(x),ffNumber, 7, 2);
+        angle=FloatToStrF(abs(y),ffNumber, 7, 1);
+        speed=FloatToStrF(abs(x),ffNumber, 7, 1);
         Label1->Caption="Angle="+angle+" Hits="+hits+" Speed="+speed;
-        //Label1->Caption="x = "+x;
 
         ball->Left +=x;
         ball->Top +=y;
@@ -57,10 +56,10 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
         //odbicie od górnej sciany;
         if (ball->Top-5 <= playground->Top) y=-y;
         //odbicie od dolnej sciany;
-        if ((ball->Top + ball->Height+5) >= (playground->Top + playground->Height)) y=-y;
+        else if ((ball->Top + ball->Height+5) >= (playground->Top + playground->Height)) y=-y;
 
         //koniec gry
-        if ((ball->Left < player1->Left + player1->Width - 5 && (ball->Top > player1->Top + player1->Height || ball->Top + ball->Height < player1->Top)) ||
+        if      ((ball->Left < player1->Left + player1->Width - 5 && (ball->Top > player1->Top + player1->Height || ball->Top + ball->Height < player1->Top)) ||
                 (ball->Left + ball->Width > player2->Left + 5 && (ball->Top > player2->Top + player2->Height || ball->Top + ball->Height < player2->Top))){
                 main->Enabled=false;
                 ball->Visible=false;
@@ -84,43 +83,40 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
                 Button3->Visible=true;
         }
         //odbicie player1
-        else if ((ball->Top < player1->Top + player1->Height &&
-                ball->Top > player1->Top + player1->Height - 40 ||
+        else if (ball->Top < player1->Top + player1->Height &&
                 ball->Top + ball->Height > player1->Top &&
-                ball->Top + ball->Height < player1->Top + 40) &&
                 ball->Left <= player1->Left + player1->Width) {
                         x=-x;
-                        if (y>0) y+=2;
-                        else y-=0.5;
                         speedIncrement();
-                }
-        else if (ball->Top <= player1->Top + player1->Height - 40 &&
-                ball->Top + ball->Height >= player1->Top + 40 &&
-                ball->Left <= player1->Left + player1->Width) {
-                        x=-x;
-                        if (y>0) y-=0.5;
-                        else if (y<0) y+=2;
-                        speedIncrement();
+                        if (ball->Top <= player1->Top + player1->Height - 30 &&
+                                ball->Top + ball->Height >= player1->Top + 30 &&
+                                ball->Left <= player1->Left + player1->Width) {
+                                        if (y>0) y-=0.2;
+                                        else if (y<0) y+=0.2;
+                                }
+                        else {
+                                if (y>0) y+=2;
+                                else y-=2;
+                        }
                 }
 
         //odbicie player2
-        else if ((ball->Top < player2->Top + player2->Height &&
-                ball->Top > player2->Top + player2->Height - 40 ||
+        else if (ball->Top < player2->Top + player2->Height &&
                 ball->Top + ball->Height > player2->Top &&
-                ball->Top + ball->Height < player2->Top + 40) &&
                 ball->Left + ball->Width >= player2->Left) {
                         x=-x;
-                        if (y>=0) y+=2;
-                        else y-=0.5;
                         speedIncrement();
-                }
-        else if (ball->Top <= player2->Top + player2->Height - 40 &&
-                ball->Top + ball->Height >= player2->Top + 40 &&
-                ball->Left + ball->Width >= player2->Left) {
-                        x=-x;
-                        if (y>0) y-=0.5;
-                        else if (y<0) y+=2;
-                        speedIncrement();
+                        if (ball->Top <= player2->Top + player2->Height - 30 &&
+                                ball->Top + ball->Height >= player2->Top + 30 &&
+                                ball->Left + ball->Width >= player2->Left) {
+                                        if (y>0) y-=0.2;
+                                        else if (y<0) y+=0.2;
+                                }
+                        else {
+                                if (y>=0) y+=2;
+                                else y-=2;
+                        }
+
                 }
 }
 //---------------------------------------------------------------------------
