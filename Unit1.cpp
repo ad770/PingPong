@@ -9,13 +9,17 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-int x=-5;
-int y=-3;
+float x=-5;
+float y=-3;
 int hits=0;
 int scorePlayer1=0;
 int scorePlayer2=0;
 int seconds=4;
 
+void speedIncrement () {
+        hits++;
+        if (hits%5==0) x*=1.1;
+}
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
@@ -41,8 +45,11 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::mainTimer(TObject *Sender)
 {
         AnsiString angle;
-        angle=IntToStr(abs(y));
-        Label1->Caption="Angle = "+angle;
+        AnsiString speed;
+        angle=FloatToStrF(abs(y),ffNumber, 7, 2);
+        speed=FloatToStrF(abs(x),ffNumber, 7, 2);
+        Label1->Caption="Angle="+angle+" Hits="+hits+" Speed="+speed;
+        //Label1->Caption="x = "+x;
 
         ball->Left +=x;
         ball->Top +=y;
@@ -53,7 +60,8 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
         if ((ball->Top + ball->Height+5) >= (playground->Top + playground->Height)) y=-y;
 
         //koniec gry
-        if (ball->Left < player1->Left + player1->Width/2 || ball->Left + ball->Width > player2->Left + player2->Width){
+        if ((ball->Left < player1->Left + player1->Width - 5 && (ball->Top > player1->Top + player1->Height || ball->Top + ball->Height < player1->Top)) ||
+                (ball->Left + ball->Width > player2->Left + 5 && (ball->Top > player2->Top + player2->Height || ball->Top + ball->Height < player2->Top))){
                 main->Enabled=false;
                 ball->Visible=false;
                 p1_up->Enabled=false;
@@ -82,17 +90,17 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
                 ball->Top + ball->Height < player1->Top + 40) &&
                 ball->Left <= player1->Left + player1->Width) {
                         x=-x;
-                        if (y>0) y++;
-                        else y--;
-                        hits++;
+                        if (y>0) y+=2;
+                        else y-=0.5;
+                        speedIncrement();
                 }
         else if (ball->Top <= player1->Top + player1->Height - 40 &&
                 ball->Top + ball->Height >= player1->Top + 40 &&
                 ball->Left <= player1->Left + player1->Width) {
                         x=-x;
-                        if (y>0) y--;
-                        else if (y<0) y++;
-                        hits++;
+                        if (y>0) y-=0.5;
+                        else if (y<0) y+=2;
+                        speedIncrement();
                 }
 
         //odbicie player2
@@ -102,17 +110,17 @@ void __fastcall TForm1::mainTimer(TObject *Sender)
                 ball->Top + ball->Height < player2->Top + 40) &&
                 ball->Left + ball->Width >= player2->Left) {
                         x=-x;
-                        if (y>=0) y++;
-                        else y--;
-                        hits++;
+                        if (y>=0) y+=2;
+                        else y-=0.5;
+                        speedIncrement();
                 }
         else if (ball->Top <= player2->Top + player2->Height - 40 &&
                 ball->Top + ball->Height >= player2->Top + 40 &&
                 ball->Left + ball->Width >= player2->Left) {
                         x=-x;
-                        if (y>0) y--;
-                        else if (y<0) y++;
-                        hits++;
+                        if (y>0) y-=0.5;
+                        else if (y<0) y+=2;
+                        speedIncrement();
                 }
 }
 //---------------------------------------------------------------------------
@@ -156,11 +164,6 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
 }
 //---------------------------------------------------------------------------
 
-
-
-
-
-
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
         winner->Visible=false;
@@ -172,6 +175,8 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
         ball->Visible=true;
         main->Enabled=true;
         y=-3;
+        x=-5;
+        hits=0;
 }
 //---------------------------------------------------------------------------
 
@@ -179,7 +184,8 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
 {
         scorePlayer1=0;
         scorePlayer2=0;
-        Button1Click(Owner);        
+        Button1Click(Owner);
+
 }
 //---------------------------------------------------------------------------
 
