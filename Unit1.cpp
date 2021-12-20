@@ -204,3 +204,5 @@ void __fastcall TForm1::startCounterTimer(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+
